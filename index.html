@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Digit Classifier</title>
+    </head>
+    <body>
+        <input type="text" id="textinput">
+        <button onclick="inputtext()">Searching</button>
+        <h1>Data List</h1>
+        <ul id="data-list"></ul>
+
+        <script type="text/javascript">
+            async function inputtext(params) {
+                const input = document.getElementById('textinput');
+                if (!input){
+                    alert("masukan kata")
+                    return;
+                }
+
+                try {
+                    // const response = await fetch(`http://127.0.0.1:8000/jurnal-rekomen/?jurnals=${jurnals}`);
+                    const response = await fetch(`http://127.0.0.1:8000/jurnal-rekomen/?abstract=${encodeURIComponent(input)}`);
+                    
+                    const result = await response.json()
+                    const dataListElement = document.getElementById('data-list');
+                    document.getElementById('data-list').textContent = `prediction ${result}`;
+                    console.log(result)
+                    if (Array.isArray(result)) {
+                        // Mengosongkan konten sebelumnya
+                        dataListElement.innerHTML = '';
+
+                        // Membuat elemen <li> untuk setiap item dalam list
+                        result.forEach(item => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = JSON.stringify(item, null, 2); // Format item sebagai string JSON
+                            dataListElement.appendChild(listItem);
+                        });
+                    } else {
+                        dataListElement.textContent = 'Data yang diterima bukan list.';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('fail')
+                } //fetchAndDisplayList();
+            }
+        </script>
+    </body>
+</html>
