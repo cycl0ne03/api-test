@@ -1,0 +1,7 @@
+numpy
+pandas
+fastapi
+sklearn
+nltk
+json
+uvicorn
